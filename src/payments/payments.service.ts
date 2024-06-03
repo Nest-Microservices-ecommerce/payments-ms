@@ -35,7 +35,11 @@ export class PaymentsService {
       success_url: envs.successUrl,
       cancel_url: envs.cancelUrl,
     });
-    return session;
+    return {
+      cancelUrl: session.cancel_url,
+      successUrl: session.success_url,
+      url: session.url,
+    };
   }
 
   public async stripeWebhook(req: Request, res: Response) {
