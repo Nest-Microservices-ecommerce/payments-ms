@@ -1,4 +1,5 @@
 import { NestFactory } from '@nestjs/core';
+import { Transport, MicroserviceOptions } from '@nestjs/microservices';
 import { AppModule } from './app.module';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { envs } from './config';
@@ -16,6 +17,15 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
+
+  app.connectMicroservice<MicroserviceOptions>({
+    transport: Transport.NATS,
+    options: {
+      servers: envs.natsServers,
+    },
+  });
+
+  await app.startAllMicroservices();
 
   await app.listen(envs.port);
 
